@@ -4,31 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My GPT UI</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Arial; padding: 16px; max-width: 720px; margin: 0 auto; }
-    input, textarea, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; }
-    textarea { height: 120px; }
-    pre { white-space: pre-wrap; background:#f6f6f6; padding:12px; border-radius:10px; }
-  </style>
 </head>
-<body>
-  <h2>Cloud Run GPT (şifreli)</h2>
-
-  <label>Servis URL (değiştirme):</label>
-  <input id="baseUrl" value="https://chatgptapi-766809067486.europe-west1.run.app" />
+<body style="font-family:sans-serif; padding:20px; max-width:700px; margin:auto;">
+  <h2>Cloud Run GPT</h2>
 
   <label>Şifre (INTERNAL_API_KEY):</label>
-  <input id="key" type="password" placeholder="x-api-key" />
+  <input id="key" type="password" style="width:100%; padding:10px;" />
 
   <label>Soru:</label>
-  <textarea id="q" placeholder="Bir şey sor..."></textarea>
+  <textarea id="q" style="width:100%; height:100px;"></textarea>
 
-  <button id="btn">Gönder</button>
+  <button onclick="ask()" style="padding:10px; width:100%;">Gönder</button>
 
   <pre id="out"></pre>
 
 
-<script>
+  <script>
   const keyInput = document.getElementById("key");
   const qInput = document.getElementById("q");
   const out = document.getElementById("out");
@@ -63,9 +54,7 @@
       out.textContent = "Hata: " + e;
     }
   }
-</script>
-
-
-
+  </script>
+  
 </body>
 </html>
