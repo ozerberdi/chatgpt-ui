@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My GPT UI</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Arial; padding: 16px; max-width: 720px; margin: 0 auto; }
+    input, textarea, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; }
+    textarea { height: 120px; }
+    pre { white-space: pre-wrap; background:#f6f6f6; padding:12px; border-radius:10px; }
+  </style>
+</head>
+<body>
+  <h2>Cloud Run GPT (şifreli)</h2>
+
+  <label>Servis URL (değiştirme):</label>
+  <input id="baseUrl" value="https://chatgptapi-766809067486.europe-west1.run.app" />
+
+  <label>Şifre (INTERNAL_API_KEY):</label>
+  <input id="key" type="password" placeholder="x-api-key" />
+
+  <label>Soru:</label>
+  <textarea id="q" placeholder="Bir şey sor..."></textarea>
+
+  <button id="btn">Gönder</button>
+
+  <pre id="out"></pre>
+
+  <script>
+    const out = document.getElementById("out");
+    const btn = document.getElementById("btn");
+
+    btn.onclick = async () => {
+      out.textContent = "Gönderiliyor...";
+      const baseUrl = document.getElementById("baseUrl").value.trim().replace(/\/$/, "");
+      const key = document.getElementById("key").value;
+      const q = document.getElementById("q").value;
+
+      if (!key) { out.textContent = "Şifre boş olamaz"; return; }
+      if (!q.trim()) { out.textContent = "Soru boş olamaz"; return; }
+
+      const url = `${baseUrl}/ask?q=${encodeURIComponent(q)}`;
+
+      try {
+        const res = await fetch(url, {
+          method: "GET",
+          headers: { "x-api-key": key }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          out.textContent = `Hata (${res.status}): ` + (data.detail || data.error || JSON.stringify(data));
+          return;
+        }
+
+        out.textContent = data.answer || JSON.stringify(data, null, 2);
+      } catch (e) {
+        out.textContent = "İstek hatası: " + e;
+      }
+    };
+  </script>
+</body>
+</html>
